@@ -1,54 +1,65 @@
- #!/usr/bin/env python3
+#!/usr/bin/env python3
 import os
 import time
+import subprocess
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
 
 
-# Set up the Chrome driver options and headless mode 
-chrome_options = Options()  
-chrome_options.add_argument("--headless")  
-chrome_options.add_argument("--disable-gpu")  
+# Set environment variables for Gmail credentials 
+GMAIL_USERNAME = os.environ['GMAIL_USERNAME'] 
+GMAIL_PASSWORD = os.environ['GMAIL_PASSWORD'] 
 
- # Create the driver and set it to wait for elements to load 
-driver = webdriver.Chrome(options=chrome_options)  
 
- # Set up a loop to run every hour 
-while True:  
+# Set up headless Chrome browser options 
+options = Options() 
+options.headless = True 
 
-    # Scrape 10 videos from TikTok 
-    driver.get('https://www.tiktok.com/')  
 
-    videos = WebDriverWait(driver, 10).until(EC.presence_of_all_elements_located((By.CLASS_NAME, 'video-card')))[:10]  
+# Create a new instance of the Chrome driver 
+browser = webdriver.Chrome(options=options)
 
-    # Download the videos 
-    for video in videos:  
 
-        video_url = video['src']  
+while True:
 
-        os.system('wget {}'.format(video_url))  
+    # Scrape 10 videos from TikTok and save them to the current directory 
+    subprocess.run(["scrape-tiktok", "-n", "10"])
 
-    # Concatenate all the videos into one file 
-    os.system('ffmpeg -f concat -safe 0 -i <(for f in *.mp4; do echo "file '$PWD/$f'"; done) -c copy final-video-concatenated-file-name-here')  
+    # Concatenate all downloaded videos into one file named final.mp4  
+    subprocess.run(["ffmpeg", "-f", "concat", "-safe", "0", "-i", "list.txt", "-c", "copy", "final.mp4"])
 
-    # Rename the concatenated file to final 
-    os.system('mv final-video-concatenated-file-name-here final')  
+    # Log in to YouTube using Selenium and upload the concatenated video  
+    browser.get('https://accounts.google.com/signin/v2/identifier?service=youtube&uilel=3&passive=true&continue=https%3A%2F%2Fwww.youtube.com%2Fsignin%3Faction_handle_signin%3Dtrue%26app%3Ddesktop%26hl%3Den-GB%26next%3Dhttps%253A%252F%252Fwww.youtube.com%252F&hl=en-GB&ec=65620')
 
-    # Upload the file to YouTube using headless Selenium 
-    driver = webdriver.Chrome(options=chrome_options)  
+    username_input = browser.find_element_by_name('identifier')  # Find username input field by name attribute  
+    username_input .send_keys(GMAIL_USERNAME)                  # Enter Gmail username into input field  
 
-    driver .get('https://www.youtube/upload')  
+    nextButton = browser.find_element_by_id('identifierNext')   # Find Next button by id attribute  												   # Click Next button to proceed to password page  
 
-    upload = WebDriverWait(driver, 10).until(EC .presence_of_element _located((By .ID, 'upload')))[0]  
+    nextButton .click()                                        # Click Next button to proceed to password page  
 
-    upload .send _keys('final .mp4')     # Path of the concatenated file 
+    time .sleep(5)                                             # Wait 5 seconds for page to load before entering password  
 
-     # Wait for upload to finish and then close the browser window 
-     time .sleep (60 * 5)     # Wait 5 minutes for upload to finish 
+    passwordInput = browser .find_element_by _name('password') # Find password input field by name attribute  
 
-     driver .close ()         # Close browser window after upload is complete 
+    passwordInput .send _keys (GMAIL _PASSWORD)               # Enter Gmail password into input field  
 
-     time .sleep (60 * 60)     # Wait 1 hour before starting again
+    signInButton = browser .find _element _by _id ('passwordNext')     # Find Sign In button by id attribute    					       # Click Sign In button to log in to YouTube account    
+
+    signInButton .click()                                     # Click Sign In button to log in to YouTube account    
+
+    time .sleep (5)                                           # Wait 5 seconds for page to load before uploading video    
+
+    uploadButton = browser .find _element _by _xpath ('//*[@id="upload-prompt-box"]/div[2]/div[1]/span[1]')      # Find Upload Video button by xpath expression    
+
+    uploadButton .click()                                     # Click Upload Video button    
+
+    time .sleep (5)                                           # Wait 5 seconds for page to load before selecting file    
+
+    selectFileInput = browser .find _element _by _xpath ('//*[@id="start-upload-button-single"]')      # Find Select File input field by xpath expression    
+
+    selectFileInput .send _keys (os ._getcwd () + '/final .mp4 ')      # Enter path of concatenated video file into input field    
+
+        publishButton = browser .find element by xpath ('//*[@id="upload-item-0"]/div[4]/div[1]/div[1]/span[1]')      # Find Publish Video button by xpath expression    
+
+        publishButton .click()                                   # Click Publish Video button
