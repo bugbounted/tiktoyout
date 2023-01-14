@@ -7,7 +7,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-import time, os, subprocess
+import time, os, subprocess, shutil
 import asyncio
 from ffmpeg import FFmpeg
 from moviepy.editor import *
@@ -26,32 +26,45 @@ driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), opti
 #creating a webdriver object and opening the webpage 
 driver = webdriver.Chrome() 
 # Go to the page with the videos 
-driver.get("https://proxitok.pabloferreiro.es/tag/gamer") 
- 
-# Get all video elements from the page 
-videos = driver.find_elements_by_css_selector('video') 
- 
-# Download each video one by one 
-for i, video in enumerate(videos[:10]): 
+browser.get('https://proxitok.pabloferreiro.es/tag/gamer') 
+wait = WebDriverWait(browser, 10) 
+  
+#finding all the video links on the page using XPATH selector 
+video_links = browser.find_elements_by_xpath("//a[@class='video-link']") 
 
-    # Get the source of the video element  
-    src = video.get_attribute('src')  
+ #downloading 10 videos from the page  
+for i in range(10): 
 
-    # Download the video  
-    os.system(f"curl -o {i}.mp4 {src}")  
+    #clicking on each video link to open it in a new tab  
+    video_links[i].click() 
 
-    print(f"Downloaded {i}.mp4")  
+    #switching to the new tab  
+    browser.switch_to_window(browser.window_handles[1]) 
 
-     # Close the browser window  
-driver.quit()  
+    #waiting for the download button to appear  
+    wait.until(EC.visibility_of_element_located((By.XPATH, "//button[@class='download-button']"))) 
 
- # Concatenate all downloaded videos into one and rename it to final.mp4  
+    #finding and clicking on the download button  
+    downloadButton = browser.find_element_by_xpath("//button[@class='download-button']") 
 
- clips = [VideoFileClip(file) for file in glob.glob("*.mp4")]  
+    downloadButton .click() 
 
- final_clip = concatenate_videoclips(clips)  
+    #switching back to the main tab  
+    browser.switch_to_window(browser.window_handles[0]) 
 
- final_clip.write_videofile("final.mp4")
+     #closing the current tab  
+    browser.close() 
+
+     #switching back to main tab again  
+    browser.switch_to().window(browser.window_handles[0])     
+
+     #moving all downloaded videos into one folder named 'videos'  																	                                                                                            
+     os.mkdir('videos')      
+     shutil.move('Downloads', 'videos')      
+     files = os.listdir('videos/Downloads')      
+     print(files)       #concatenating all downloaded videos into one file named 'final'      
+     concatCommand = 'ffmpeg -f concat -safe 0 -i files -c copy final .mp4'      
+     subprocess.call(concatCommand, shell=True)
 
  # Log into YouTube using Selenium and upload the concatenated file renamed to final mp4    
 driver.get("https://accounts.google.com/ServiceLogin?service=youtube")
