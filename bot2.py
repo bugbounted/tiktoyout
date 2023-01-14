@@ -26,45 +26,31 @@ driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), opti
 #creating a webdriver object and opening the webpage 
 driver = webdriver.Chrome() 
 # Go to the page with the videos 
-browser.get('https://proxitok.pabloferreiro.es/tag/gamer') 
-wait = WebDriverWait(browser, 10) 
-  
-#finding all the video links on the page using XPATH selector 
-video_links = browser.find_elements_by_xpath("//a[@class='video-link']") 
+url = "https://proxitok.pabloferreiro.es/tag/gamer"  #url of the webpage to be opened 
+driver.get(url)   #opening the webpage 
+wait = WebDriverWait(driver, 10) #waiting for 10 seconds for page to load completely 
 
- #downloading 10 videos from the page  
-for i in range(10): 
+ #finding all video elements on the page using XPATH selector 
+video_elements = driver.find_elements_by_xpath("/html/body/section[2]/div[1]/article/div/div[3]/div[2]/div[2]/div/a[2]")  
 
-    #clicking on each video link to open it in a new tab  
-    video_links[i].click() 
+ #downloading all videos one by one and saving them in a folder named 'videos' in current directory  
+for i, video in enumerate(video_elements):    #enumerate is used to get index of each element in list 
 
-    #switching to the new tab  
-    browser.switch_to_window(browser.window_handles[1]) 
+    video_src = video.get_attribute('href')   #getting source of each video element
 
-    #waiting for the download button to appear  
-    wait.until(EC.visibility_of_element_located((By.XPATH, "//button[@class='download-button']"))) 
+    if not os.path.exists('videos'):    #creating a folder named 'videos' if it doesn't exist already 
+        os.mkdir('videos')
 
-    #finding and clicking on the download button  
-    downloadButton = browser.find_element_by_xpath("//button[@class='download-button']") 
+    file_name = f"videos/video_{i}.mp4"   #naming each downloaded file as 'video_(index).mp4'
 
-    downloadButton .click() 
+    command = f"wget -O {file_name} {video_src}"   #using wget command to download each video from its source url and save it with given name in 'videos' folder
 
-    #switching back to the main tab  
-    browser.switch_to_window(browser.window_handles[0]) 
+    subprocess.call(command, shell=True)   #executing wget command using subprocess library 
 
-     #closing the current tab  
-    browser.close() 
+     #concatenating all downloaded videos into one and renaming it to final.mp4 using ffmpeg command line tool 
+concatenateCommand = "ffmpeg -f concat -safe 0 -i <(for f in ./videos/*; do echo \"file '$f'\"; done) -c copy final.mp4"   #ffmpeg command for concatenation of multiple videos into one single file 
 
-     #switching back to main tab again  
-    browser.switch_to().window(browser.window_handles[0])     
-
-     #moving all downloaded videos into one folder named 'videos'  																	                                                                                            
-     os.mkdir('videos')      
-     shutil.move('Downloads', 'videos')      
-     files = os.listdir('videos/Downloads')      
-     print(files)       #concatenating all downloaded videos into one file named 'final'      
-     concatCommand = 'ffmpeg -f concat -safe 0 -i files -c copy final.mp4'      
-     subprocess.call(concatCommand, shell=True)
+subprocess.call(concatenateCommand, shell=True)   #executing ffmpeg command using subprocess library 
 
  # Log into YouTube using Selenium and upload the concatenated file renamed to final mp4    
 driver.get("https://accounts.google.com/ServiceLogin?service=youtube")
