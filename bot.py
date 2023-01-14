@@ -55,7 +55,7 @@ for i in range(1, 11):
 
  # Concatenate all downloaded videos into one file named final .mp4 using ffmpeg command line tool   
 
- subprocess.run([ "ffmpeg", "-f", "concat", "-safe", "0", "-i", "mylist .txt", "-c", "copy", "final.mp4"])
+subprocess.run(["ffmpeg", "-f", "concat", "-safe", "0", "-i", "mylist.txt", "-c", "copy", "final.mp4"])
 
  # Concatenate all downloaded videos into one file named final mp4 using ffmpeg command line tool    
 os.system('ffmpeg -f concat -safe 0 -i <(for f in ./videos/*; do echo "file '$f'"; done) -c copy final.mp4')    
