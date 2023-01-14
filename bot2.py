@@ -11,6 +11,7 @@ import time, os, subprocess
 import asyncio
 from ffmpeg import FFmpeg
 from moviepy.editor import *
+import glob
 
 path = '/usr/local/bin/chromedriver'
 service = Service(path)
@@ -24,36 +25,33 @@ driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), opti
 #driver = webdriver.Chrome('/usr/lib/chromium-browser/chromedriver', options=chrome_options)
 #creating a webdriver object and opening the webpage 
 driver = webdriver.Chrome() 
+# Go to the page with the videos 
 driver.get("https://proxitok.pabloferreiro.es/tag/gamer") 
-  
-#finding all the video elements on the page 
-videos = driver.find_elements_by_xpath("/html/body/section[2]/div[1]/article/div/div[3]/div[2]/div[2]/div/a[2]") 
-  
-#creating a list to store all the video files 
-video_files = [] 
-  
-#downloading 10 videos from the page without watermark 
-for i in range(10): 
+ 
+# Get all video elements from the page 
+videos = driver.find_elements_by_css_selector('video') 
+ 
+# Download each video one by one 
+for i, video in enumerate(videos[:10]): 
 
-    #getting the source of each video element and downloading it to local directory 
-    src = videos[i].get_attribute('href') 
+    # Get the source of the video element  
+    src = video.get_attribute('src')  
 
-    #generating a unique name for each video file using its index in list of videos  
-    filename = "video" + str(i) + ".mp4"
+    # Download the video  
+    os.system(f"curl -o {i}.mp4 {src}")  
 
-    #downloading each video file to local directory with unique name generated above  														     
-    os.system("wget -O " + filename + " " + src)
+    print(f"Downloaded {i}.mp4")  
 
-    #appending each downloaded video file to list of video files  
-    video_files.append(filename) 
+     # Close the browser window  
+driver.quit()  
 
-   #closing the web browser window after downloading all 10 videos     driver.close()
+ # Concatenate all downloaded videos into one and rename it to final.mp4  
 
-   #creating an instance of concatenate class from moviepy library and passing list of downloaded videos as argument     
-   final_clip = concatenate_videoclips(video_files)
+ clips = [VideoFileClip(file) for file in glob.glob("*.mp4")]  
 
-   #writing the concatenated clip to local directory with name final.mp4     
-   final_clip.write_videofile("final.mp4")
+ final_clip = concatenate_videoclips(clips)  
+
+ final_clip.write_videofile("final.mp4")
 
  # Log into YouTube using Selenium and upload the concatenated file renamed to final mp4    
 driver.get("https://accounts.google.com/ServiceLogin?service=youtube")
