@@ -18,7 +18,7 @@ chrome_options = Options()
 chrome_options.add_argument("--headless")
 chrome_options.add_argument('--no-sandbox')
 chrome_options.add_argument('--disable-dev-shm-usage')
-driver = webdriver.Chrome(ChromeDriverManager().install())
+driver = webdriver.Chrome(ChromeDriverManager().install(), options=chrome_options)
 #driver = webdriver.Chrome(service=service, options=chrome_options)
 #driver = webdriver.Chrome('/usr/lib/chromium-browser/chromedriver', options=chrome_options)
 url = "https://www.tiktok.com/"  # Replace with the URL you want to scrape from 
