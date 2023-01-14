@@ -19,6 +19,7 @@ chrome_options.add_argument("--headless")
 
  # Create a new instance of the Chrome driver 
 browser = webdriver.Chrome(options=chrome_options)
+driver = webdriver.Chrome()
 
  # Go to the TikTok website and scrape 10 videos 
 browser.get('https://www.tiktok.com/') 
@@ -50,9 +51,19 @@ for i, video in enumerate(videos):
         time .sleep (2)  
 
  # Concatenate all downloaded videos into one file named final mp4 using ffmpeg command line tool    
-os .system ('ffmpeg -f concat -safe 0 -i <(for f in ./videos/*; do echo "file '$f'"; done) -c copy final mp4')    
+os .system ('ffmpeg -f concat -safe 0 -i <(for f in ./videos/*; do echo "file '$f'"; done) -c copy final.mp4')    
 
  # Log into YouTube using Selenium and upload the concatenated file renamed to final mp4    
-browser .get ('https://accounts google com/signin/v2/identifier?service=youtube&uilel=0&passive=true&continue=https%3A%2F%2Fwww youtube com%2Fsignin%3Faction handle signin%26app%3Ddesktop%26hl en-GB%26next %3Dhttps 3A 2F 2Fwww youtube com 2F&hl en-GB&ec=65620&flowName=GlifWebSignIn&flowEntry=ServiceLogin')    
-
-username = browser find element By XPATH ("//input[@type='email']") username send keys GMAIL USERNAME     password = browser find element By XPATH ("//input[@type='password']") password send keys GMAIL PASSWORD     login button = browser find element By XPATH ("//div[@id='identifierNext']") login button click ()     time sleep 5     upload button = browser find element By XPATH ("//div[@id='upload-prompt-box']") upload button click ()     time sleep 5     select file button = browser find element By XPATH ("//input[@type='file']") select file button send keys os path join os get cwd (), "final mp4"
+driver.get("https://accounts.google.com/ServiceLogin?service=youtube")
+ 
+# Enter username and password and submit form
+username = driver.find_element_by_id("Email")
+password = driver.find_element_by_id("Passwd")
+username.send_keys("yourUsername") # Replace with your username 
+password.send_keys("yourPassword") # Replace with your password 
+password.submit()  # Submit form to log in to YouTube account 
+ 
+# Navigate to upload page and upload video file 
+driver.get("https://www.youtube.com/upload")   # Go to upload page on YouTube 
+uploadButton = driver.find_element_by_id('upload-prompt-box')   # Find the upload button on the page  
+uploadButton.send_keys('./final.mp4')   # Replace with path and name of concatenated video file renamed to finalVideoFileName  
