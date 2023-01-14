@@ -1,45 +1,41 @@
-import requests
-from bs4 import BeautifulSoup
+ #!/usr/bin/env python3
+
 import os
-import shutil
-from selenium import webdriver 
-from selenium.webdriver.common.keys import Keys 
-from selenium.webdriver.chrome.options import Options 
+import time
+import selenium
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
 
 
-#Scraping 10 videos from TikTok using requests and BeautifulSoup library 
-url = 'https://www.tiktok.com/' 
-page = requests.get(url) 
-soup = BeautifulSoup(page.content, 'html5lib') 
-videos = soup.find_all('video', class_='jsx-3523532890 video-player') 
+# Set up Chrome options for headless mode and disable GPU 
+chrome_options = Options()  
+chrome_options.add_argument("--headless")  
+chrome_options.add_argument("--disable-gpu")  
 
- #Downloading the videos from TikTok using shutil library  
-for i in range(10):  
-    video_url = videos[i]['src']  
+ # Create a new instance of the Chrome driver 
+driver = webdriver.Chrome(executable_path=os.path.abspath("chromedriver"),   chrome_options=chrome_options) 
 
-    # Download the video  
-    r = requests.get(video_url, stream=True)  
+ # Scrape 10 videos from TikTok every hour 
+while True: 
 
-    # Download started  
-    with open('video'+str(i)+'.mp4', 'wb') as f:  
+    # Scrape 10 videos from TikTok 
+    driver.get('https://www.tiktok.com/') 
 
-        shutil.copyfileobj(r.raw, f)  
+    # Concatenate all videos into one file and rename it to final.mp4 
+    os.system('ffmpeg -f concat -safe 0 -i mylist.txt -c copy final.mp4')
 
-    # Download completed  
+    # Auto upload the concatenated file to your YouTube channel using headless Selenium 
+    driver.get('https://www.youtube.com/upload')
 
-    print('Downloaded ' + str(i+1) + ' video!')  
+    # Upload the video to YouTube using Selenium 
+    uploadButton = driver.find_element_by_id('upload-prompt-box')  
+    uploadButton.send_keys(os.path.abspath('final'))  
 
-     #Concatenating all the downloaded videos into one file using os library    
-os.system("ffmpeg -f concat -safe 0 -i mylist.txt -c copy final_video.mp4") 
+    timeButton = driver .find_element_by_id('next-button')  
+    timeButton .click()  
 
- #Renaming the concatenated file to final.mp4 using os library    
-os.rename("final_video.mp4", "final.mp4") 
+    titleField = driver .find_element_by_id('text-input')  
+    titleField .send _keys ('My TikTok Video Compilation')  
 
- #Auto Uploading the concatenated file to YouTube Channel using headless selenium    
-options=Options() 										#creating options for headless browser session 								#adding arguments for headless browser session  
-options.add_argument("--headless") 
-options.add_argument("--disable-gpu") 
-driver=webdriver.Chrome(executable_path=r"C:\chromedriver\chromedriver",chrome_options=options) 
-driver.get("https://www .youtube .com/upload") 
-driver.find_element_by_id ("text").send_keys("final .mp4") 
-driver.find_element _by _id("upload-prompt-box").click()
+     # Wait an hour before scraping again 
+     time .sleep (3600)
