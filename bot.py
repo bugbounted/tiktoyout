@@ -10,7 +10,7 @@ import time, os, subprocess
 import asyncio
 from ffmpeg import FFmpeg
 
-path = '/usr/bin/google-chrome'
+path = '/usr/local/bin/chromedriver'
 service = Service(path)
 
 chrome_options = Options()
