@@ -10,55 +10,29 @@ from ffmpeg import FFmpeg
 
 
 # Create a new instance of the Chrome driver 
-driver = webdriver.Chrome('/usr/lib/chromium-browser/chromedriver', options=chrome_options)
-  
-# Go to the TikTok website 
-driver.get("https://www.tiktok.com/") 
+# Set up the web driver and open the page 
+driver = webdriver.Chrome()  # Replace with .Firefox(), or with the browser of your choice
+url = "https://www.tiktok.com/"  # Replace with the URL you want to scrape from 
+driver.get(url)
 
- # Wait for the page to load 
-wait = WebDriverWait(driver, 10) 
 
- # Find the search bar and enter a query 
-search_bar = wait.until(EC.presence_of_element_located((By.XPATH, "//input[@placeholder='Search']"))) 
-search_bar.send_keys("funny") 
+# Wait for the page to load and find all video elements on the page 
+wait = WebDriverWait(driver, 10)  # Wait up to 10 seconds for the elements to become available 
+videos = wait.until(EC.presence_of_all_elements_located((By.CSS_SELECTOR, ".video-feed-item")))[:10]  # Get only 10 videos
 
- # Click on the search button 
-search_button = wait.until(EC.element_to_be_clickable((By.XPATH, "//button[@type='submit']"))) 
-search_button .click() 
 
- # Wait for the results to load 
-wait = WebDriverWait(driver, 10)  
+# Download each video and save it in a folder called "videos" 
+if not os.path.exists("videos"): os.mkdir("videos")   # Create a folder called "videos" if it doesn't exist yet 
+for i, video in enumerate(videos):   # Loop through all videos on the page 
 
- # Get all video links from the page and store them in a list  
-video_links = []  
+    # Get the download link of each video and download it using wget command line tool  
+    download_link = video.find_element_by_css_selector("a").get_attribute("href")   # Get the download link of each video  
 
- # Iterate over all videos on the page and get their links  
-for i in range(1, 11):  
+    subprocess.run(["wget", "-O", f"videos/video{i}.mp4", download_link])   # Download each video using wget command line tool and save it in "videos" folder with name "video{i}.mp4"
 
-    video = wait.until(EC.presence_of_element_located((By.XPATH, f"//div[@class='video-feed-item'][{i}]//a[@class='jsx-3523532887 video-feed-item__wrapper']")))  
-
-    video_links .append(video .get_attribute('href'))  
-
-    print (f"Found link {i}: {video .get_attribute('href')}")  
-
- # Download all videos from the list of links using youtube-dl command line tool  
-
-for link in video_links:  
-
-    print (f"Downloading video from {link}...")  
-
-    subprocess.run(["youtube-dl", "-o", "videos/%(title)s-%(id)s", link])  
-
-    print("Done!")  
-
-    time.sleep(2) # Sleep for 2 seconds before downloading next video to avoid getting blocked by TikTok server   
-
- # Concatenate all downloaded videos into one file named final .mp4 using ffmpeg command line tool   
-
-subprocess.run(["ffmpeg", "-f", "concat", "-safe", "0", "-i", "mylist.txt", "-c", "copy", "final.mp4"])
-
- # Concatenate all downloaded videos into one file named final mp4 using ffmpeg command line tool    
-#os.system('ffmpeg -f concat -safe 0 -i <(for f in ./videos/*; do echo "file '$f'"; done) -c copy final.mp4')    
+    
+# Concatenate all downloaded videos into one file called final.mp4 using ffmpeg command line tool  
+subprocess.run(["ffmpeg", "-f", "concat", "-safe", "0", "-i", "listfile", "-c", "copy", "final.mp4"])   # Concatenate all downloaded videos into one file called final
 
  # Log into YouTube using Selenium and upload the concatenated file renamed to final mp4    
 driver.get("https://accounts.google.com/ServiceLogin?service=youtube")
