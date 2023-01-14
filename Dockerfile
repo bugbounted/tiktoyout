@@ -30,6 +30,7 @@ ADD . /app
 WORKDIR /app
 
 RUN pip install selenium
+RUN pip install webdriver-manager
 RUN pip install --no-cache-dir -r requirements.txt
 
 CMD ["python3", "bot.py"]
