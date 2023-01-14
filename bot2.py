@@ -63,7 +63,7 @@ for i in range(10):
      shutil.move('Downloads', 'videos')      
      files = os.listdir('videos/Downloads')      
      print(files)       #concatenating all downloaded videos into one file named 'final'      
-     concatCommand = 'ffmpeg -f concat -safe 0 -i files -c copy final .mp4'      
+     concatCommand = 'ffmpeg -f concat -safe 0 -i files -c copy final.mp4'      
      subprocess.call(concatCommand, shell=True)
 
  # Log into YouTube using Selenium and upload the concatenated file renamed to final mp4    
