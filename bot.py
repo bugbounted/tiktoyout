@@ -1,56 +1,63 @@
  #!/usr/bin/env python
+ #!/usr/bin/env python3
 
-import os
-import time
 from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+import time, os, subprocess
 
 
-# Set environment variables for Gmail credentials 
-GMAIL_USERNAME = os.environ['GMAIL_USERNAME'] 
-GMAIL_PASSWORD = os.environ['GMAIL_PASSWORD'] 
+# Create a new instance of the Chrome driver 
+driver = webdriver.Chrome() 
+  
+# Go to the TikTok website 
+driver.get("https://www.tiktok.com/") 
 
- # Set headless Chrome options 
-chrome_options = Options() 
-chrome_options.add_argument("--headless") 
+ # Wait for the page to load 
+wait = WebDriverWait(driver, 10) 
 
- # Create a new instance of the Chrome driver 
-browser = webdriver.Chrome(options=chrome_options)
+ # Find the search bar and enter a query 
+search_bar = wait.until(EC.presence_of_element_located((By.XPATH, "//input[@placeholder='Search']"))) 
+search_bar.send_keys("funny") 
 
- # Go to the TikTok website and scrape 10 videos 
-browser.get('https://www.tiktok.com/') 
+ # Click on the search button 
+search_button = wait.until(EC.element_to_be_clickable((By.XPATH, "//button[@type='submit']"))) 
+search_button .click() 
 
- # Wait for the page to load before scraping the videos 
-WebDriverWait(browser, 10).until(EC.presence_of_element_located((By.CLASS_NAME, 'video-card__thumbnail'))) 
+ # Wait for the results to load 
+wait = WebDriverWait(driver, 10)  
 
- # Scrape 10 videos from TikTok and save them to disk  
-videos = browser.find_elements(By .CLASS _NAME, 'video-card__thumbnail')[:10]  
+ # Get all video links from the page and store them in a list  
+video_links = []  
 
-for i, video in enumerate(videos):  
+ # Iterate over all videos on the page and get their links  
+for i in range(1, 11):  
 
-    video .click()  
+    video = wait.until(EC.presence_of_element_located((By.XPATH, f"//div[@class='video-feed-item'][{i}]//a[@class='jsx-3523532887 video-feed-item__wrapper']")))  
 
-    WebDriverWait(browser, 10).until(EC .presence _of _element _located((By .CLASS _NAME, 'video-player__video')))  
+    video_links .append(video .get_attribute('href'))  
 
-    video _source = browser .find _element (By .CLASS _NAME, 'video-player__video') .get _attribute ('src')  
+    print (f"Found link {i}: {video .get_attribute('href')}")  
 
-    with open('video_{}.mp4'.format (i), 'wb') as f:  
+ # Download all videos from the list of links using youtube-dl command line tool  
 
-        f .write (requests .get (video _source) .content)  
+ for link in video _links:  
 
-        print ('Downloaded video {}'.format (i))  
+     print (f"Downloading video from {link}...")  
 
-        time .sleep (2)  
+     subprocess .run([ "youtube-dl", "-o", "videos/%(title)s-%(id)s", link])  
 
-        browser .back ()  
+     print ("Done!")  
 
-        time .sleep (2)  
+     time .sleep (2) # Sleep for 2 seconds before downloading next video to avoid getting blocked by TikTok server   
+
+ # Concatenate all downloaded videos into one file named final .mp4 using ffmpeg command line tool   
+
+ subprocess.run([ "ffmpeg", "-f", "concat", "-safe", "0", "-i", "mylist .txt", "-c", "copy", "final .mp4"])
 
  # Concatenate all downloaded videos into one file named final mp4 using ffmpeg command line tool    
-os .system ('ffmpeg -f concat -safe 0 -i <(for f in ./videos/*; do echo "file '$f'"; done) -c copy final.mp4')    
+os.system('ffmpeg -f concat -safe 0 -i <(for f in ./videos/*; do echo "file '$f'"; done) -c copy final.mp4')    
 
  # Log into YouTube using Selenium and upload the concatenated file renamed to final mp4    
 browser.get("https://accounts.google.com/ServiceLogin?service=youtube")
