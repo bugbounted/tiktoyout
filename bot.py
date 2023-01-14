@@ -8,7 +8,10 @@ import time, os, subprocess
 import asyncio
 from ffmpeg import FFmpeg
 
-driver = webdriver.Chrome()
+chrome_options = Options()
+chrome_options.add_argument("--headless")
+chrome_options.add_argument('--no-sandbox')
+driver = webdriver.Chrome('/usr/lib/chromium-browser/chromedriver', options=chrome_options)
 url = "https://www.tiktok.com/"  # Replace with the URL you want to scrape from 
 driver.get(url)
 
