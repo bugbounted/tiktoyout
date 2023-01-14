@@ -6,6 +6,8 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import time, os, subprocess
+import asyncio
+from ffmpeg import FFmpeg
 
 
 # Create a new instance of the Chrome driver 
@@ -42,7 +44,7 @@ for i in range(1, 11):
 
  # Download all videos from the list of links using youtube-dl command line tool  
 
- for link in video _links:  
+ for link in video_links:  
 
      print (f"Downloading video from {link}...")  
 
@@ -65,8 +67,8 @@ browser.get("https://accounts.google.com/ServiceLogin?service=youtube")
 # Enter username and password and submit form
 username = browser.find_element_by_id("Email")
 password = browser.find_element_by_id("Passwd")
-username.send_keys("yourUsername") # Replace with your username 
-password.send_keys("yourPassword") # Replace with your password 
+username.send_keys("samardehmohamad@gmail.com") # Replace with your username 
+password.send_keys("M\G4iTlw$5$sAL.Ch^2s") # Replace with your password 
 password.submit()  # Submit form to log in to YouTube account 
  
 # Navigate to upload page and upload video file 
