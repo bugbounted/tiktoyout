@@ -43,15 +43,15 @@ for i in range(1, 11):
 
  # Download all videos from the list of links using youtube-dl command line tool  
 
- for link in video_links:  
+for link in video_links:  
 
-     print (f"Downloading video from {link}...")  
+    print (f"Downloading video from {link}...")  
 
-     subprocess .run([ "youtube-dl", "-o", "videos/%(title)s-%(id)s", link])  
+    subprocess.run(["youtube-dl", "-o", "videos/%(title)s-%(id)s", link])  
 
-     print ("Done!")  
+    print("Done!")  
 
-     time .sleep (2) # Sleep for 2 seconds before downloading next video to avoid getting blocked by TikTok server   
+    time.sleep(2) # Sleep for 2 seconds before downloading next video to avoid getting blocked by TikTok server   
 
  # Concatenate all downloaded videos into one file named final .mp4 using ffmpeg command line tool   
 
