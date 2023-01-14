@@ -12,6 +12,7 @@ from ffmpeg import FFmpeg
 chrome_options = Options()
 chrome_options.add_argument("--headless")
 chrome_options.add_argument('--no-sandbox')
+chrome_options.add_argument('--disable-dev-shm-usage')
 driver = webdriver.Chrome('/usr/lib/chromium-browser/chromedriver', options=chrome_options)
 url = "https://www.tiktok.com/"  # Replace with the URL you want to scrape from 
 driver.get(url)
