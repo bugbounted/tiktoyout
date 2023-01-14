@@ -42,7 +42,7 @@ while True:
 
     passwordInput = browser.find_element_by_name('password') # Find password input field by name attribute  
 
-    passwordInput.send_keys(GMAIL _PASSWORD)               # Enter Gmail password into input field  
+    passwordInput.send_keys(GMAIL_PASSWORD)               # Enter Gmail password into input field  
 
     signInButton = browser.find_element_by_id('passwordNext')     # Find Sign In button by id attribute    					       # Click Sign In button to log in to YouTube account    
 
