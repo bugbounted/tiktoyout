@@ -27,7 +27,7 @@ driver = webdriver.Chrome()
 driver.get("https://proxitok.pabloferreiro.es/tag/gamer") 
   
 #finding all the video elements on the page 
-videos = driver.find_elements_by_xpath("//video[@class='video-js vjs-default-skin']") 
+videos = driver.find_elements_by_xpath("/html/body/section[2]/div[1]/article/div/div[3]/div[2]/div[2]/div/a[2]") 
   
 #creating a list to store all the video files 
 video_files = [] 
@@ -36,7 +36,7 @@ video_files = []
 for i in range(10): 
 
     #getting the source of each video element and downloading it to local directory 
-    src = videos[i].get_attribute('src') 
+    src = videos[i].get_attribute('href') 
 
     #generating a unique name for each video file using its index in list of videos  
     filename = "video" + str(i) + ".mp4"
