@@ -23,10 +23,13 @@ RUN wget -N https://chromedriver.storage.googleapis.com/79.0.3945.36/chromedrive
     && chown root:root /usr/local/bin/chromedriver \
     && chmod 0755 /usr/local/bin/chromedriver
 
-# INSTALL SELENIUM
-RUN pip install selenium
 
 # RUN TEST SCRIPT
-COPY test_selenium.py test_selenium.py
+RUN mkdir /app
+ADD . /app
+WORKDIR /app
+
+RUN pip install selenium
+RUN pip install --no-cache-dir -r requirements.txt
 
 CMD ["python3", "bot.py"]
