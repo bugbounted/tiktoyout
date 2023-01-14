@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 from selenium import webdriver
+from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
@@ -17,7 +18,8 @@ chrome_options = Options()
 chrome_options.add_argument("--headless")
 chrome_options.add_argument('--no-sandbox')
 chrome_options.add_argument('--disable-dev-shm-usage')
-driver = webdriver.Chrome(service=service, options=chrome_options)
+driver = webdriver.Chrome(ChromeDriverManager().install())
+#driver = webdriver.Chrome(service=service, options=chrome_options)
 #driver = webdriver.Chrome('/usr/lib/chromium-browser/chromedriver', options=chrome_options)
 url = "https://www.tiktok.com/"  # Replace with the URL you want to scrape from 
 driver.get(url)
