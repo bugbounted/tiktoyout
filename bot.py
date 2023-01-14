@@ -7,7 +7,6 @@ from selenium.webdriver.support import expected_conditions as EC
 import time, os, subprocess
 import asyncio
 from ffmpeg import FFmpeg
-import undetected_chromedriver as uc
 
 driver = webdriver.Chrome()
 url = "https://www.tiktok.com/"  # Replace with the URL you want to scrape from 
