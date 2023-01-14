@@ -9,9 +9,7 @@ import asyncio
 from ffmpeg import FFmpeg
 import undetected_chromedriver as uc
 
-options = uc.ChromeOptions()
-options.arguments.extend(["--no-sandbox", "--disable-setuid-sandbox"])     # << this
-driver = uc.Chrome(options)
+driver = webdriver.Chrome()
 url = "https://www.tiktok.com/"  # Replace with the URL you want to scrape from 
 driver.get(url)
 
