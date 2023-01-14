@@ -11,7 +11,7 @@ from ffmpeg import FFmpeg
 
 # Create a new instance of the Chrome driver 
 # Set up the web driver and open the page 
-driver = webdriver.Chrome()  # Replace with .Firefox(), or with the browser of your choice
+driver = webdriver.Chrome('/usr/lib/chromium-browser/chromedriver', options=Options)  # Replace with .Firefox(), or with the browser of your choice
 url = "https://www.tiktok.com/"  # Replace with the URL you want to scrape from 
 driver.get(url)
 
