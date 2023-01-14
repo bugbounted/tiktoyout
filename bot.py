@@ -58,7 +58,7 @@ while True:
 
     selectFileInput = browser.find_element_by_xpath('//*[@id="start-upload-button-single"]')      # Find Select File input field by xpath expression    
 
-    selectFileInput.send_keys(os._getcwd () + '/final .mp4 ')      # Enter path of concatenated video file into input field    
+    selectFileInput.send_keys(os._getcwd () + '/final.mp4 ')      # Enter path of concatenated video file into input field    
 
         publishButton = browser.find_element_by_xpath('//*[@id="upload-item-0"]/div[4]/div[1]/div[1]/span[1]')      # Find Publish Video button by xpath expression    
 
