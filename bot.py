@@ -40,26 +40,26 @@ while True:
 
     time .sleep(5)                                             # Wait 5 seconds for page to load before entering password  
 
-    passwordInput = browser .find_element_by _name('password') # Find password input field by name attribute  
+    passwordInput = browser.find_element_by_name('password') # Find password input field by name attribute  
 
     passwordInput .send _keys (GMAIL _PASSWORD)               # Enter Gmail password into input field  
 
-    signInButton = browser .find _element _by _id ('passwordNext')     # Find Sign In button by id attribute    					       # Click Sign In button to log in to YouTube account    
+    signInButton = browser.find_element_by_id('passwordNext')     # Find Sign In button by id attribute    					       # Click Sign In button to log in to YouTube account    
 
     signInButton .click()                                     # Click Sign In button to log in to YouTube account    
 
     time .sleep (5)                                           # Wait 5 seconds for page to load before uploading video    
 
-    uploadButton = browser .find _element _by _xpath ('//*[@id="upload-prompt-box"]/div[2]/div[1]/span[1]')      # Find Upload Video button by xpath expression    
+    uploadButton = browser.find_element_by_xpath('//*[@id="upload-prompt-box"]/div[2]/div[1]/span[1]')      # Find Upload Video button by xpath expression    
 
     uploadButton .click()                                     # Click Upload Video button    
 
     time .sleep (5)                                           # Wait 5 seconds for page to load before selecting file    
 
-    selectFileInput = browser .find _element _by _xpath ('//*[@id="start-upload-button-single"]')      # Find Select File input field by xpath expression    
+    selectFileInput = browser.find_element_by_xpath('//*[@id="start-upload-button-single"]')      # Find Select File input field by xpath expression    
 
-    selectFileInput .send _keys (os ._getcwd () + '/final .mp4 ')      # Enter path of concatenated video file into input field    
+    selectFileInput.send_keys(os._getcwd () + '/final .mp4 ')      # Enter path of concatenated video file into input field    
 
-        publishButton = browser .find element by xpath ('//*[@id="upload-item-0"]/div[4]/div[1]/div[1]/span[1]')      # Find Publish Video button by xpath expression    
+        publishButton = browser.find_element_by_xpath('//*[@id="upload-item-0"]/div[4]/div[1]/div[1]/span[1]')      # Find Publish Video button by xpath expression    
 
         publishButton .click()                                   # Click Publish Video button
