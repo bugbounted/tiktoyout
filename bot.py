@@ -1,5 +1,4 @@
- #!/usr/bin/env python
- #!/usr/bin/env python3
+#!/usr/bin/env python3
 
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -62,16 +61,16 @@ for i in range(1, 11):
 os.system('ffmpeg -f concat -safe 0 -i <(for f in ./videos/*; do echo "file '$f'"; done) -c copy final.mp4')    
 
  # Log into YouTube using Selenium and upload the concatenated file renamed to final mp4    
-browser.get("https://accounts.google.com/ServiceLogin?service=youtube")
+driver.get("https://accounts.google.com/ServiceLogin?service=youtube")
  
 # Enter username and password and submit form
-username = browser.find_element_by_id("Email")
-password = browser.find_element_by_id("Passwd")
+username = driver.find_element_by_id("Email")
+password = driver.find_element_by_id("Passwd")
 username.send_keys("samardehmohamad@gmail.com") # Replace with your username 
 password.send_keys("M\G4iTlw$5$sAL.Ch^2s") # Replace with your password 
 password.submit()  # Submit form to log in to YouTube account 
  
 # Navigate to upload page and upload video file 
-browser.get("https://www.youtube.com/upload")   # Go to upload page on YouTube 
-uploadButton = browser.find_element_by_id('upload-prompt-box')   # Find the upload button on the page  
+driver.get("https://www.youtube.com/upload")   # Go to upload page on YouTube 
+uploadButton = driver.find_element_by_id('upload-prompt-box')   # Find the upload button on the page  
 uploadButton.send_keys('./final.mp4')   # Replace with path and name of concatenated video file renamed to finalVideoFileName  
