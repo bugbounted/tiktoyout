@@ -58,7 +58,7 @@ for link in video_links:
 subprocess.run(["ffmpeg", "-f", "concat", "-safe", "0", "-i", "mylist.txt", "-c", "copy", "final.mp4"])
 
  # Concatenate all downloaded videos into one file named final mp4 using ffmpeg command line tool    
-os.system('ffmpeg -f concat -safe 0 -i <(for f in ./videos/*; do echo "file '$f'"; done) -c copy final.mp4')    
+#os.system('ffmpeg -f concat -safe 0 -i <(for f in ./videos/*; do echo "file '$f'"; done) -c copy final.mp4')    
 
  # Log into YouTube using Selenium and upload the concatenated file renamed to final mp4    
 driver.get("https://accounts.google.com/ServiceLogin?service=youtube")
