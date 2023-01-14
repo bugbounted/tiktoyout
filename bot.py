@@ -26,7 +26,7 @@ driver.get(url)
 
 
 # Wait for the page to load and find all video elements on the page 
-wait = WebDriverWait(driver, 10)  # Wait up to 10 seconds for the elements to become available 
+wait = WebDriverWait(driver, 20)  # Wait up to 10 seconds for the elements to become available 
 videos = wait.until(EC.presence_of_all_elements_located((By.CSS_SELECTOR, ".video-feed-item")))[:10]  # Get only 10 videos
 
 
