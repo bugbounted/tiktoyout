@@ -10,7 +10,7 @@ from ffmpeg import FFmpeg
 
 
 # Create a new instance of the Chrome driver 
-driver = webdriver.Chrome() 
+driver = webdriver.Chrome('/usr/lib/chromium-browser/chromedriver', options=chrome_options)
   
 # Go to the TikTok website 
 driver.get("https://www.tiktok.com/") 
@@ -74,3 +74,4 @@ password.submit()  # Submit form to log in to YouTube account
 driver.get("https://www.youtube.com/upload")   # Go to upload page on YouTube 
 uploadButton = driver.find_element_by_id('upload-prompt-box')   # Find the upload button on the page  
 uploadButton.send_keys('./final.mp4')   # Replace with path and name of concatenated video file renamed to finalVideoFileName  
+driver.close()
