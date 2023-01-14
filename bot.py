@@ -39,14 +39,20 @@ driver = webdriver.Chrome(options=chrome_options)
 username = os.environ['YOUTUBE_USERNAME']  
 password = os.environ['YOUTUBE_PASSWORD']  
 
- # Find and fill out username field on login page with stored credentials 																     driver .findElement(By .name("username")) .sendKeys(username);    
+ # Find and fill out username field on login page with stored credentials 																     
+ driver .findElement(By .name("username")) .sendKeys(username);    
 
- # Find and fill out password field on login page with stored credentials                                                                       driver .findElement(By .name("password")) .sendKeys(password);    
+ # Find and fill out password field on login page with stored credentials                                                                       
+ driver .findElement(By .name("password")) .sendKeys(password);    
 
- # Click submit button to log into account                                                                                                    driver .findElement(By .id("submit-button")) .click();    
+ # Click submit button to log into account                                                                                                    
+ driver .findElement(By .id("submit-button")) .click();    
 
- # Navigate to upload page on YouTube website                                                                                                  driver .get('https://www.youtube/upload');    
+ # Navigate to upload page on YouTube website                                                                                                  
+ driver .get('https://www.youtube/upload');    
 
- # Find and upload final video file from local directory to YouTube account using Selenium WebDriver API methods                         driver .findElement(By .id("upload-prompt-box")) .sendKeys("finalvideofilepath");    
+ # Find and upload final video file from local directory to YouTube account using Selenium WebDriver API methods                         
+ driver .findElement(By .id("upload-prompt-box")) .sendKeys("finalvideofilepath");    
 
- # Set up loop to repeat process hourly (3600 seconds) while True:      os .system('ffmpeg -f concat -safe 0 -i mylisttxt -c copy finalmp4')      driver = webdriverChrome (options=chromeOptions)      username = os environ['YOUTUBEUSERNAME']      password = os environ['YOUTUBEPASSWORD']      driver findElement (By name("username")) sendKeys (username);      driver findElement (By name("password")) sendKeys (password);      driver findElement (By id("submitbutton")) click();      driver get('https://wwwyoutubecom/upload');      driver findElement (By id("uploadpromptbox")) sendKeys ("finalvideofilepath");       time sleep (3600)
+ # Set up loop to repeat process hourly (3600 seconds) while True:      
+ os .system('ffmpeg -f concat -safe 0 -i mylisttxt -c copy finalmp4')      driver = webdriverChrome (options=chromeOptions)      username = os environ['YOUTUBEUSERNAME']      password = os environ['YOUTUBEPASSWORD']      driver findElement (By name("username")) sendKeys (username);      driver findElement (By name("password")) sendKeys (password);      driver findElement (By id("submitbutton")) click();      driver get('https://wwwyoutubecom/upload');      driver findElement (By id("uploadpromptbox")) sendKeys ("finalvideofilepath");       time sleep (3600)
