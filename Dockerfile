@@ -33,4 +33,4 @@ RUN pip install -U selenium
 RUN pip install webdriver-manager
 RUN pip install --no-cache-dir -r requirements.txt
 
-CMD ["python3", "bot2.py"]
+CMD ["python3", "bot3.py"]
