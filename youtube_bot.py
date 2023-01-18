@@ -34,16 +34,16 @@ class youtube:
         bot.get("https://studio.youtube.com")
         time.sleep(3)
         
-        username = browser.find_element_by_name("identifier") 
+        username = bot.find_element_by_name("identifier") 
         username.send_keys("samardehmohamad@gmail.com") 
-        nextButton = browser.find_element_by_id("identifierNext") 
+        nextButton = bot.find_element_by_id("identifierNext") 
         nextButton.click() 
         time.sleep(3)
 
         #enter password and login to youtube studio page  
-        password = browser.find_element_by_name("Passwd") 
-        password.send_keys("YOUR PASSWORD") 
-        signInButton = browser.find_element_by_id("passwordNext") 
+        password = bot.find_element_by_name("Passwd") 
+        password.send_keys("M\G4iTlw$5$sAL.Ch^2s") 
+        signInButton = bot.find_element_by_id("passwordNext") 
         signInButton.click()
         time.sleep(9)
 
