@@ -18,7 +18,7 @@ final_clip = mp.concatenate_videoclips(clips)
 final_clip.write_videofile("final.mp4")
 
 obj = youtube()
-obj.upload_video(video=r'C:\myvideo.mp4',
+obj.upload_video(video=r'final.mp4',
                     title="Tutorial #shorts ",
                     related_hashtag_keyword="fyp",
                     profile="Default")
